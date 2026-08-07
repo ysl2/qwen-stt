@@ -60,6 +60,7 @@ def main():
     parser.add_argument('audio')
     parser.add_argument('--format', default='txt')
     parser.add_argument('--language', default='Chinese')
+    parser.add_argument('--subtitle-interval', type=float)
     args = parser.parse_args()
 
     print('Loading audio...')
@@ -69,7 +70,16 @@ def main():
     output = str(Path(args.audio).with_suffix(''))
 
     if args.format in ('srt', 'vtt'):
-        timestamps = get_speech_timestamps(audio)
+        if args.subtitle_interval is not None:
+            timestamps = [
+                {
+                    'start': start,
+                    'end': min(start + args.subtitle_interval, duration),
+                }
+                for start in np.arange(0, duration, args.subtitle_interval)
+            ]
+        else:
+            timestamps = get_speech_timestamps(audio)
 
         print('Loading STT model...')
         model = load_stt(MODEL)
