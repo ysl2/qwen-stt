@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qwen-stt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "mlx-audio[stt]",
+]
+
+[project.scripts]
+qwen-stt = "qwen_stt:main"
+
+[tool.setuptools]
+py-modules = ["qwen_stt"]
